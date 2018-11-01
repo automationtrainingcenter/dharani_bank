@@ -9,7 +9,7 @@ public class BaseClass {
 	WebDriver driver;
 	
 	public void launchBrowser() {
-		System.setProperty("webdriver.chrome.driver", "E:\\selenium\\softwares\\drivers\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", "C:\\dharani\\softwares\\drivers\\chromedriver_win32\\chromedriver.exe");
 		driver = new ChromeDriver();
 		driver.get("http://srssprojects.in");
 		driver.manage().window().maximize();
