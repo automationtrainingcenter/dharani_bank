@@ -1,10 +1,19 @@
 package in.srssprojects.kexim_bank;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.events.WebDriverEventListener;
 import org.openqa.selenium.support.ui.Select;
 
 public class BranchDetialsPage {
+	WebDriver driver;
+
+	public BranchDetialsPage(WebDriver driver) {
+		this.driver = driver;
+	}
 
 	// country select
 	@FindBy(id = "lst_countryS")
@@ -41,7 +50,7 @@ public class BranchDetialsPage {
 	}
 
 	// select City
-	public void selectState(String strCityValue) {
+	public void selectCity(String strCityValue) {
 		new Select(this.lstCity).selectByVisibleText(strCityValue);
 	}
 
@@ -56,8 +65,9 @@ public class BranchDetialsPage {
 	}
 
 	// click on new branch button
-	public void clickNewBranchButton() {
+	public BranchCreationPage clickNewBranchButton() {
 		this.newBranchButton.click();
+		return PageFactory.initElements(driver, BranchCreationPage.class);
 	}
 
 }
