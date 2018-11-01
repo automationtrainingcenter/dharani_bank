@@ -17,6 +17,9 @@ public class AdminHomePage {
 	@FindBy(how =How.XPATH, using= "//a[@href='Admin_Roles_details.aspx']")
 	private WebElement roles;
 	
+	public AdminHomePage(WebDriver driver) {
+		this.driver = driver;
+	}
 	//users
 	@FindBy(how =How.XPATH, using= "//a[@href='userdetails.aspx']")
 	private WebElement users;
