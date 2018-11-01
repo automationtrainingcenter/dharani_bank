@@ -30,7 +30,7 @@ public class TestExecution extends BaseClass{
 //		click on brnaches button in admin home page
 		branchDetailsPageObj = adminHomePageObj.clickBranches();
 //		click on new branch button in branch details page
-		branchDetailsPageObj.clickNewBranchButton();
+		branchCreationPageObj = branchDetailsPageObj.clickNewBranchButton();
 //		fill a form in branch creation page
 		branchCreationPageObj.fillBranchCreationForm("branchNameBranch", "addresss", "43211", "INDIA", "GOA", "GOA");
 //		click on submit in branch creation page
@@ -44,7 +44,7 @@ public class TestExecution extends BaseClass{
 //		click on brnaches button in admin home page
 		branchDetailsPageObj = adminHomePageObj.clickBranches();
 //		click on new branch button in branch details page
-		branchDetailsPageObj.clickNewBranchButton();
+		branchCreationPageObj = branchDetailsPageObj.clickNewBranchButton();
 //		fill a form in branch creation page
 		branchCreationPageObj.fillBranchCreationForm("branchNameBranch", "addresss", "43211", "INDIA", "GOA", "GOA");
 //		click on submit in branch creation page
@@ -58,7 +58,7 @@ public class TestExecution extends BaseClass{
 //		click on brnaches button in admin home page
 		branchDetailsPageObj = adminHomePageObj.clickBranches();
 //		click on new branch button in branch details page
-		branchDetailsPageObj.clickNewBranchButton();
+		branchCreationPageObj = branchDetailsPageObj.clickNewBranchButton();
 //		click on submit in branch creation page
 		alert = branchCreationPageObj.clickSubmitButton();
 		System.out.println(alert.getText());
@@ -70,7 +70,7 @@ public class TestExecution extends BaseClass{
 //		click on brnaches button in admin home page
 		branchDetailsPageObj = adminHomePageObj.clickBranches();
 //		click on new branch button in branch details page
-		branchDetailsPageObj.clickNewBranchButton();
+		branchCreationPageObj = branchDetailsPageObj.clickNewBranchButton();
 //		fill a form in branch creation page
 		branchCreationPageObj.fillBranchCreationForm("branchNameBranch", "addresss", "43211", "INDIA", "GOA", "GOA");
 //		click on submit in branch creation page
@@ -83,7 +83,7 @@ public class TestExecution extends BaseClass{
 //		click on brnaches button in admin home page
 		branchDetailsPageObj = adminHomePageObj.clickBranches();
 //		click on new branch button in branch details page
-		branchDetailsPageObj.clickNewBranchButton();
+		branchCreationPageObj = branchDetailsPageObj.clickNewBranchButton();
 //		fill a form in branch creation page
 		branchCreationPageObj.fillBranchCreationForm("branchNameBranch", "addresss", "43211", "INDIA", "GOA", "GOA");
 //		click on submit in branch creation page
@@ -91,7 +91,7 @@ public class TestExecution extends BaseClass{
 	}
 	
 	
-	@Test(priority = 2)
+	@Test(priority = 20)
 	public void tearDown() {
 		closeBrowser();
 	}
