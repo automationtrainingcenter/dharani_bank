@@ -2,22 +2,71 @@ package in.srssprojects.kexim_bank;
 
 public class BranchCreationPage {
 
-	//branch name field
-	
-	//address 1 field
-	
-	//zip code field
-	
-	//country field
-	
-	//state filed
-	
-	//city field
-	
-	//submit button
-	
-	//reset button
-	
-	//cancel button
+	// branch name field
+
+	@FindBy(id = "txtbName")
+	private WebElement txtBranchName;
+
+	// address 1 field
+	@FindBy(id = "txtAdd1")
+	private WebElement txtAdd1Value;
+
+	// zip code field
+	@FindBy(id = "txtZip")
+	private WebElement txtZipValue;
+
+	// country field
+	@FindBy(id = "lst_counrtyU")
+	private WebElement lstCountryUValue;
+
+	// state filed
+	@FindBy(id = "lst_stateI")
+	private WebElement lstStateIValue;
+
+	// city field
+	@FindBy(id = "lst_cityI")
+	private WebElement lstCityIValue;
+
+	// submit button
+	@FindBy(id = "btn_insert")
+	private WebElement btnInsert;
+
+	// reset button
+	@FindBy(id = "Btn_Reset")
+	private WebElement btnReset;
+
+	// cancel button
+	@FindBy(id = "Btn_cancel")
+	private WebElement btnCancel;
+
+	// select Country
+	public void selectCountry(String StrCountryUValue) {
+		new Select(this.lstCountryUValue).selectByVisibleText(StrCountryUValue);
+	}
+
+	// select State
+	public void selectState(String strStateIValue) {
+		new Select(this.lstStateIValue).selectByVisibleText(strStateIValue);
+	}
+
+	// select City
+	public void selectState(String strCityIValue) {
+		new Select(this.lstCityIValue).selectByVisibleText(lstCityIValue);
+	}
+
+	// click on Insert button
+	public void clickInsertBranch() {
+		this.btnInsert.click();
+	}
+
+	// click on Clear button
+	public void clickResetButton() {
+		this.btnReset.click();
+	}
+
+	// click on new branch button
+	public void clickCancelButton() {
+		this.btnCancel.click();
+	}
 
 }
