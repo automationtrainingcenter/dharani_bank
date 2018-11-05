@@ -88,8 +88,9 @@ public class BranchCreationPage {
 	}
 
 	// click on Clear button
-	public void clickResetButton() {
+	public String clickResetButton() {
 		this.btnReset.click();
+		return new Select(this.lstCountryUValue).getFirstSelectedOption().getText();
 	}
 
 	// click on new branch button

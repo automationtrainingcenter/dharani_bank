@@ -67,5 +67,9 @@ public class BranchDetialsPage {
 		this.newBranchButton.click();
 		return PageFactory.initElements(driver, BranchCreationPage.class);
 	}
+	
+	public boolean isNewBranchButtonDisplyed() {
+		return this.newBranchButton.isDisplayed();
+	}
 
 }

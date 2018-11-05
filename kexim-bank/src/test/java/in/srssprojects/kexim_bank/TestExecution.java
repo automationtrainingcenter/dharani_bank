@@ -1,6 +1,12 @@
 package in.srssprojects.kexim_bank;
 
+import static org.testng.Assert.assertTrue;
+
 import org.openqa.selenium.Alert;
+import org.testng.Assert;
+import org.testng.Reporter;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 public class TestExecution extends BaseClass {
@@ -14,21 +20,19 @@ public class TestExecution extends BaseClass {
 	EmployeePage empPageObj;
 	EmployeeCreationPage empCreationPageObj;
 
-	@Test(priority = 0)
-	public void setup() {
-		launchBrowser();
-		bankHomePageObj = new BankHomePage(driver);
-
-	}
-
-	@Test(priority = 1)
+	@BeforeMethod(groups = {"employee", "create", "branch", "role", "cancel", "reset"})
 	public void loginTest() {
 		bankHomePageObj.fillUserName("Admin");
 		bankHomePageObj.fillPassword("Admin");
 		adminHomePageObj = bankHomePageObj.clickLogin();
 	}
 
-	@Test(priority = 2)
+	@AfterMethod(groups = {"employee", "create", "branch", "role", "cancel", "reset"})
+	public void logoutTest() {
+		adminHomePageObj.clickLogout();
+	}
+
+	@Test(priority = 2, groups = { "branch", "create" })
 	public void branchCreation() {
 		// click on branches button in admin home page
 		branchDetailsPageObj = adminHomePageObj.clickBranches();
@@ -38,11 +42,12 @@ public class TestExecution extends BaseClass {
 		branchCreationPageObj.fillBranchCreationForm("branchNameBranch", "addresss", "43211", "INDIA", "GOA", "GOA");
 		// click on submit in branch creation page
 		alert = branchCreationPageObj.clickSubmitButton();
-		System.out.println(alert.getText());
+		Reporter.log("alert came " + alert.getText(), true);
+		Assert.assertTrue(alert.getText().contains("New Branch with id"));
 		alert.accept();
 	}
 
-	@Test(priority = 3)
+	@Test(priority = 3, groups = { "branch", "create" }, dependsOnMethods= {"branchCreation"})
 	public void branchCreationWithDuplicatedata() {
 		// click on branches button in admin home page
 		branchDetailsPageObj = adminHomePageObj.clickBranches();
@@ -52,11 +57,12 @@ public class TestExecution extends BaseClass {
 		branchCreationPageObj.fillBranchCreationForm("branchNameBranch", "addresss", "43211", "INDIA", "GOA", "GOA");
 		// click on submit in branch creation page
 		alert = branchCreationPageObj.clickSubmitButton();
-		System.out.println(alert.getText());
+		Reporter.log("alert came " + alert.getText(), true);
+		Assert.assertTrue(alert.getText().toLowerCase().contains("already exists"));
 		alert.accept();
 	}
 
-	@Test(priority = 4)
+	@Test(priority = 4, groups = { "branch", "create" })
 	public void branchCreationWithBlankData() {
 		// click on branches button in admin home page
 		branchDetailsPageObj = adminHomePageObj.clickBranches();
@@ -64,11 +70,11 @@ public class TestExecution extends BaseClass {
 		branchCreationPageObj = branchDetailsPageObj.clickNewBranchButton();
 		// click on submit in branch creation page
 		alert = branchCreationPageObj.clickSubmitButton();
-		System.out.println(alert.getText());
+		Reporter.log("alert came " + alert.getText(), true);
 		alert.accept();
 	}
 
-	@Test(priority = 5)
+	@Test(priority = 5, groups = { "branch", "reset" })
 	public void branchCreationReset() {
 		// click on branches button in admin home page
 		branchDetailsPageObj = adminHomePageObj.clickBranches();
@@ -77,11 +83,12 @@ public class TestExecution extends BaseClass {
 		// fill a form in branch creation page
 		branchCreationPageObj.fillBranchCreationForm("branchNameBranch", "addresss", "43211", "INDIA", "GOA", "GOA");
 		// click on submit in branch creation page
-		branchCreationPageObj.clickResetButton();
+		String actualOptionText = branchCreationPageObj.clickResetButton();
+		Assert.assertEquals(actualOptionText, "Select");
 
 	}
 
-	@Test(priority = 6)
+	@Test(priority = 6, groups = { "branch", "cancel" })
 	public void branchCreationCancel() {
 		// click on brnaches button in admin home page
 		branchDetailsPageObj = adminHomePageObj.clickBranches();
@@ -90,12 +97,13 @@ public class TestExecution extends BaseClass {
 		// fill a form in branch creation page
 		branchCreationPageObj.fillBranchCreationForm("branchNameBranch", "addresss", "43211", "INDIA", "GOA", "GOA");
 		// click on submit in branch creation page
-		branchCreationPageObj.clickCancelButton();
+		 branchDetailsPageObj = branchCreationPageObj.clickCancelButton();
+		Assert.assertTrue(branchDetailsPageObj.isNewBranchButtonDisplyed());
 	}
 
 	// For Role Creation page
 
-	@Test(priority = 7)
+	@Test(priority = 7, groups = { "role", "create" })
 	public void roleCreation() {
 		// click on Roles button in admin home page
 		roleDetailsPageObj = adminHomePageObj.clickRoles();
@@ -105,13 +113,13 @@ public class TestExecution extends BaseClass {
 		roleCreationPageObj.fillformRoleCreation("Rolenamew", "E");
 		// click on submit in Role creation page
 		alert = roleCreationPageObj.clickInsertRoleButton();
-		System.out.println(alert.getText());
+		Reporter.log("alert came " + alert.getText(), true);
 		// handle alert
 		alert.accept();
 
 	}
 
-	@Test(priority = 8)
+	@Test(priority = 8, groups = { "role", "create" })
 	public void roleCreationWithDuplicate() {
 		// click on Roles button in admin home page
 		roleDetailsPageObj = adminHomePageObj.clickRoles();
@@ -121,12 +129,12 @@ public class TestExecution extends BaseClass {
 		roleCreationPageObj.fillformRoleCreation("Rolenamew", "E");
 		// click on submit in Role creation page
 		alert = roleCreationPageObj.clickInsertRoleButton();
-		System.out.println(alert.getText());
+		Reporter.log("alert came " + alert.getText(), true);
 		// handle alert
 		alert.accept();
 	}
 
-	@Test(priority = 9)
+	@Test(priority = 9, groups = { "role", "create" })
 	public void roleCreationWithBlank() {
 		// click on Roles button in admin home page
 		roleDetailsPageObj = adminHomePageObj.clickRoles();
@@ -134,12 +142,12 @@ public class TestExecution extends BaseClass {
 		roleCreationPageObj = roleDetailsPageObj.clickNewRoleButton();
 		// click on submit in Role creation page
 		alert = roleCreationPageObj.clickInsertRoleButton();
-		System.out.println(alert.getText());
+		Reporter.log("alert came " + alert.getText(), true);
 		// handle alert
 		alert.accept();
 	}
 
-	@Test(priority = 10)
+	@Test(priority = 10, groups = { "role", "reset" })
 	public void roleCreationReset() {
 		// click on Roles button in admin home page
 		roleDetailsPageObj = adminHomePageObj.clickRoles();
@@ -152,7 +160,7 @@ public class TestExecution extends BaseClass {
 
 	}
 
-	@Test(priority = 11)
+	@Test(priority = 11, groups = { "role", "cancel" })
 	public void roleCreationCancel() {
 		// click on Roles button in admin home page
 		roleDetailsPageObj = adminHomePageObj.clickRoles();
@@ -167,24 +175,22 @@ public class TestExecution extends BaseClass {
 
 	// for Employee creation
 
-	@Test(priority = 12)
+	@Test(priority = 12, groups = { "employee", "create" })
 	public void empCreation() {
-
-//	click on emp button in admin home page
+		// click on emp button in admin home page
 		empPageObj = adminHomePageObj.clickEmployees();
-//	click on new emp button in emp details page
+		// click on new emp button in emp details page
 		empCreationPageObj = empPageObj.clickNewEmpButton();
-//	fill a form in emp creation page
+		// fill a form in emp creation page
 		empCreationPageObj.fillEmployeeDetails("david", "password", "manager", "ABranch1");
-//	click on submit in emp creation page
+		// click on submit in emp creation page
 		alert = empCreationPageObj.clickSubmitEmpButton();
-		System.out.println(alert.getText());
+		Reporter.log("alert came " + alert.getText(), true);
 		// handle alert
 		alert.accept();
-
 	}
 
-	@Test(priority = 13)
+	@Test(priority = 13, groups = { "employee", "create" })
 	public void empCreationWithDuplicate() {
 //		click on emp button in admin home page
 		empPageObj = adminHomePageObj.clickEmployees();
@@ -194,13 +200,13 @@ public class TestExecution extends BaseClass {
 		empCreationPageObj.fillEmployeeDetails("david", "password", "manager", "ABranch1");
 //		click on submit in emp creation page
 		alert = empCreationPageObj.clickSubmitEmpButton();
-		System.out.println(alert.getText());
-		// handle alert
+
+		Reporter.log("alert came " + alert.getText(), true);// handle alert
 		alert.accept();
 
 	}
 
-	@Test(priority = 14)
+	@Test(priority = 14, groups = { "employee", "create" })
 	public void empCreationWithBlank() {
 //		click on emp button in admin home page
 		empPageObj = adminHomePageObj.clickEmployees();
@@ -208,13 +214,13 @@ public class TestExecution extends BaseClass {
 		empCreationPageObj = empPageObj.clickNewEmpButton();
 //		click on submit in emp creation page
 		alert = empCreationPageObj.clickSubmitEmpButton();
-		System.out.println(alert.getText());
+		Reporter.log("alert came " + alert.getText(), true);
 		// handle alert
 		alert.accept();
 
 	}
 
-	@Test(priority = 15)
+	@Test(priority = 15, groups = { "employee", "reset" })
 	public void empCreationReset() {
 //		click on emp button in admin home page
 		empPageObj = adminHomePageObj.clickEmployees();
@@ -227,7 +233,7 @@ public class TestExecution extends BaseClass {
 
 	}
 
-	@Test(priority = 16)
+	@Test(priority = 16, groups = { "employee", "cancel" })
 	public void empCreationCancel() {
 //		click on emp button in admin home page
 		empPageObj = adminHomePageObj.clickEmployees();
@@ -238,11 +244,6 @@ public class TestExecution extends BaseClass {
 //		click on cancel in emp creation page
 		empCreationPageObj.clickCancelEmpButton();
 
-	}
-
-	@Test(priority = 20)
-	public void tearDown() {
-		closeBrowser();
 	}
 
 }
