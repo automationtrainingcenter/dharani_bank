@@ -13,7 +13,7 @@ public class ParameterExecution extends TestExecution {
 	@Parameters({"url", "brName"})
 	public void setup(String u, String br) {
 		try {
-			launchBrowser(br, u);
+			launchBrowser(br, u, true);
 		} catch (InvalidBrowserNameException e) {
 			System.out.println(e.getMessage());
 		}

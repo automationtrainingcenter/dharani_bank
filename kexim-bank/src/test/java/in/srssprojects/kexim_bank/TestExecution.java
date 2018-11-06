@@ -7,8 +7,12 @@ import org.testng.Assert;
 import org.testng.Reporter;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
+import com.relevantcodes.extentreports.ExtentReports;
+import com.relevantcodes.extentreports.ExtentTest;
+@Listeners(TestNgListener.class)
 public class TestExecution extends BaseClass {
 	BankHomePage bankHomePageObj;
 	AdminHomePage adminHomePageObj;
@@ -19,15 +23,18 @@ public class TestExecution extends BaseClass {
 	RoleCreationPage roleCreationPageObj;
 	EmployeePage empPageObj;
 	EmployeeCreationPage empCreationPageObj;
+	String alertText;
+	
+	
 
-	@BeforeMethod(groups = {"employee", "create", "branch", "role", "cancel", "reset"})
+	@Test(priority = 0,groups = {"employee", "create", "branch", "role", "cancel", "reset"})
 	public void loginTest() {
 		bankHomePageObj.fillUserName("Admin");
 		bankHomePageObj.fillPassword("Admin");
 		adminHomePageObj = bankHomePageObj.clickLogin();
 	}
 
-	@AfterMethod(groups = {"employee", "create", "branch", "role", "cancel", "reset"})
+	@Test(priority = 20, groups = {"employee", "create", "branch", "role", "cancel", "reset"})
 	public void logoutTest() {
 		adminHomePageObj.clickLogout();
 	}
@@ -42,9 +49,9 @@ public class TestExecution extends BaseClass {
 		branchCreationPageObj.fillBranchCreationForm("branchNameBranch", "addresss", "43211", "INDIA", "GOA", "GOA");
 		// click on submit in branch creation page
 		alert = branchCreationPageObj.clickSubmitButton();
-		Reporter.log("alert came " + alert.getText(), true);
-		Assert.assertTrue(alert.getText().contains("New Branch with id"));
+		alertText = alert.getText();
 		alert.accept();
+		Assert.assertTrue(alertText.toLowerCase().contains("successfully"));
 	}
 
 	@Test(priority = 3, groups = { "branch", "create" }, dependsOnMethods= {"branchCreation"})
@@ -57,9 +64,10 @@ public class TestExecution extends BaseClass {
 		branchCreationPageObj.fillBranchCreationForm("branchNameBranch", "addresss", "43211", "INDIA", "GOA", "GOA");
 		// click on submit in branch creation page
 		alert = branchCreationPageObj.clickSubmitButton();
-		Reporter.log("alert came " + alert.getText(), true);
-		Assert.assertTrue(alert.getText().toLowerCase().contains("already exists"));
+		alertText = alert.getText();
 		alert.accept();
+		Assert.assertTrue(alertText.toLowerCase().contains("already exists"));
+		
 	}
 
 	@Test(priority = 4, groups = { "branch", "create" })
@@ -70,7 +78,6 @@ public class TestExecution extends BaseClass {
 		branchCreationPageObj = branchDetailsPageObj.clickNewBranchButton();
 		// click on submit in branch creation page
 		alert = branchCreationPageObj.clickSubmitButton();
-		Reporter.log("alert came " + alert.getText(), true);
 		alert.accept();
 	}
 
@@ -102,7 +109,6 @@ public class TestExecution extends BaseClass {
 	}
 
 	// For Role Creation page
-
 	@Test(priority = 7, groups = { "role", "create" })
 	public void roleCreation() {
 		// click on Roles button in admin home page
@@ -113,10 +119,7 @@ public class TestExecution extends BaseClass {
 		roleCreationPageObj.fillformRoleCreation("Rolenamew", "E");
 		// click on submit in Role creation page
 		alert = roleCreationPageObj.clickInsertRoleButton();
-		Reporter.log("alert came " + alert.getText(), true);
-		// handle alert
 		alert.accept();
-
 	}
 
 	@Test(priority = 8, groups = { "role", "create" })
@@ -129,8 +132,6 @@ public class TestExecution extends BaseClass {
 		roleCreationPageObj.fillformRoleCreation("Rolenamew", "E");
 		// click on submit in Role creation page
 		alert = roleCreationPageObj.clickInsertRoleButton();
-		Reporter.log("alert came " + alert.getText(), true);
-		// handle alert
 		alert.accept();
 	}
 
@@ -142,8 +143,6 @@ public class TestExecution extends BaseClass {
 		roleCreationPageObj = roleDetailsPageObj.clickNewRoleButton();
 		// click on submit in Role creation page
 		alert = roleCreationPageObj.clickInsertRoleButton();
-		Reporter.log("alert came " + alert.getText(), true);
-		// handle alert
 		alert.accept();
 	}
 
@@ -185,8 +184,6 @@ public class TestExecution extends BaseClass {
 		empCreationPageObj.fillEmployeeDetails("david", "password", "manager", "ABranch1");
 		// click on submit in emp creation page
 		alert = empCreationPageObj.clickSubmitEmpButton();
-		Reporter.log("alert came " + alert.getText(), true);
-		// handle alert
 		alert.accept();
 	}
 
@@ -200,8 +197,6 @@ public class TestExecution extends BaseClass {
 		empCreationPageObj.fillEmployeeDetails("david", "password", "manager", "ABranch1");
 //		click on submit in emp creation page
 		alert = empCreationPageObj.clickSubmitEmpButton();
-
-		Reporter.log("alert came " + alert.getText(), true);// handle alert
 		alert.accept();
 
 	}
@@ -214,10 +209,8 @@ public class TestExecution extends BaseClass {
 		empCreationPageObj = empPageObj.clickNewEmpButton();
 //		click on submit in emp creation page
 		alert = empCreationPageObj.clickSubmitEmpButton();
-		Reporter.log("alert came " + alert.getText(), true);
 		// handle alert
 		alert.accept();
-
 	}
 
 	@Test(priority = 15, groups = { "employee", "reset" })

@@ -11,7 +11,7 @@ public class BasicExecution extends TestExecution {
 	@BeforeClass(groups = { "employee", "create", "branch", "role", "cancel", "reset" })
 	public void setup() {
 		try {
-			launchBrowser("chrome", "http://srssprojects.in");
+			launchBrowser("chrome", "http://srssprojects.in", true);
 		} catch (InvalidBrowserNameException e) {
 			System.out.println(e.getMessage());
 		}
