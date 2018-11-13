@@ -7,11 +7,13 @@ import org.testng.Assert;
 import org.testng.Reporter;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
+
 @Listeners(TestNgListener.class)
 public class TestExecution extends BaseClass {
 	BankHomePage bankHomePageObj;
@@ -24,17 +26,15 @@ public class TestExecution extends BaseClass {
 	EmployeePage empPageObj;
 	EmployeeCreationPage empCreationPageObj;
 	String alertText;
-	
-	
 
-	@Test(priority = 0,groups = {"employee", "create", "branch", "role", "cancel", "reset"})
+	@Test(priority = 0, groups = { "employee", "create", "branch", "role", "cancel", "reset" })
 	public void loginTest() {
 		bankHomePageObj.fillUserName("Admin");
 		bankHomePageObj.fillPassword("Admin");
 		adminHomePageObj = bankHomePageObj.clickLogin();
 	}
 
-	@Test(priority = 20, groups = {"employee", "create", "branch", "role", "cancel", "reset"})
+	@Test(priority = 20, groups = { "employee", "create", "branch", "role", "cancel", "reset" })
 	public void logoutTest() {
 		adminHomePageObj.clickLogout();
 	}
@@ -54,7 +54,7 @@ public class TestExecution extends BaseClass {
 		Assert.assertTrue(alertText.toLowerCase().contains("successfully"));
 	}
 
-	@Test(priority = 3, groups = { "branch", "create" }, dependsOnMethods= {"branchCreation"})
+	@Test(priority = 3, groups = { "branch", "create" }, dependsOnMethods = { "branchCreation" })
 	public void branchCreationWithDuplicatedata() {
 		// click on branches button in admin home page
 		branchDetailsPageObj = adminHomePageObj.clickBranches();
@@ -67,7 +67,7 @@ public class TestExecution extends BaseClass {
 		alertText = alert.getText();
 		alert.accept();
 		Assert.assertTrue(alertText.toLowerCase().contains("already exists"));
-		
+
 	}
 
 	@Test(priority = 4, groups = { "branch", "create" })
@@ -104,7 +104,7 @@ public class TestExecution extends BaseClass {
 		// fill a form in branch creation page
 		branchCreationPageObj.fillBranchCreationForm("branchNameBranch", "addresss", "43211", "INDIA", "GOA", "GOA");
 		// click on submit in branch creation page
-		 branchDetailsPageObj = branchCreationPageObj.clickCancelButton();
+		branchDetailsPageObj = branchCreationPageObj.clickCancelButton();
 		Assert.assertTrue(branchDetailsPageObj.isNewBranchButtonDisplyed());
 	}
 
@@ -237,6 +237,50 @@ public class TestExecution extends BaseClass {
 //		click on cancel in emp creation page
 		empCreationPageObj.clickCancelEmpButton();
 
+	}
+
+	@Test(priority = 17, groups = { "branch", "create", "datadriven" })
+	public void branchCreationWithMultipleDataWODP() {
+		ExcelHelper.setExcel("resources", "testdata", "branchdata");
+		int nor = ExcelHelper.getRowCount();
+//		int noc = ExcelHelper.getCellCount();
+		for (int i = 1; i < nor; i++) {
+			String bname = ExcelHelper.readData(i, 0);
+			String address1 = ExcelHelper.readData(i, 1);
+			String zcode = ExcelHelper.readData(i, 2);
+			String country = ExcelHelper.readData(i, 3);
+			String state = ExcelHelper.readData(i, 4);
+			String city = ExcelHelper.readData(i, 5);
+			// click on branches button in admin home page
+			branchDetailsPageObj = adminHomePageObj.clickBranches();
+			// click on new branch button in branch details page
+			branchCreationPageObj = branchDetailsPageObj.clickNewBranchButton();
+			// fill a form in branch creation page
+			branchCreationPageObj.fillBranchCreationForm(bname, address1, zcode,country, state, city );
+			// click on submit in branch creation page
+			alert = branchCreationPageObj.clickSubmitButton();
+			alertText = alert.getText();
+			alert.accept();
+//			Assert.assertTrue(alertText.toLowerCase().contains("successfully"));
+		}
+	}
+	
+	@DataProvider(name = "roledata")
+	public Object[][] getRoleData(){
+		return ExcelHelper.getData("resources", "testdata", "roledata");
+	}
+	
+	@Test(priority = 18, groups = { "role", "create" }, dataProvider="roledata")
+	public void roleCreationWithMultipleData(String roleName, String roleType) {
+		// click on Roles button in admin home page
+		roleDetailsPageObj = adminHomePageObj.clickRoles();
+		// click on new role button in roles details page
+		roleCreationPageObj = roleDetailsPageObj.clickNewRoleButton();
+		// fill a form in Role creation page
+		roleCreationPageObj.fillformRoleCreation(roleName, roleType);
+		// click on submit in Role creation page
+		alert = roleCreationPageObj.clickInsertRoleButton();
+		alert.accept();
 	}
 
 }

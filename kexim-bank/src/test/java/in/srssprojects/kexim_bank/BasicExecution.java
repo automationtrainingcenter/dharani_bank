@@ -2,7 +2,6 @@ package in.srssprojects.kexim_bank;
 
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
 
 import customexceptions.InvalidBrowserNameException;
 

@@ -6,7 +6,7 @@
 		<parameter name="brName" value="chrome"></parameter>
 		<groups>
 			<run>
-				<include name="cancel"></include>
+				<include name="create"></include>
 			</run>
 		</groups>
 		<classes>

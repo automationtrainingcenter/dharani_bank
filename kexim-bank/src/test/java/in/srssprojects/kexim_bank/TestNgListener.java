@@ -1,7 +1,9 @@
 package in.srssprojects.kexim_bank;
 
 import java.io.File;
+import java.util.Arrays;
 
+import org.openqa.selenium.WebDriver;
 import org.testng.ISuite;
 import org.testng.ISuiteListener;
 import org.testng.ITestContext;
@@ -11,11 +13,12 @@ import org.testng.ITestResult;
 import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.LogStatus;
 
-public class TestNgListener extends TestExecution implements ISuiteListener, ITestListener{
+public class TestNgListener extends BaseClass implements ISuiteListener, ITestListener {
 
 	@Override
 	public void onStart(ISuite suite) {
-		report = new ExtentReports(new File(getFilePath("reports", suite.getName()+getDate()+".html")).getAbsolutePath());
+		report = new ExtentReports(
+				new File(getFilePath("reports", suite.getName() + getDate() + ".html")).getAbsolutePath());
 	}
 
 	@Override
@@ -23,11 +26,15 @@ public class TestNgListener extends TestExecution implements ISuiteListener, ITe
 		report.flush();
 	}
 
-	
-	
 	@Override
 	public void onTestStart(ITestResult result) {
-		test = report.startTest(result.getName());
+		Object[] parameters = result.getParameters();
+		if (parameters.length > 0) {
+			test = report.startTest(result.getName()+Arrays.toString(parameters));
+			test.log(LogStatus.INFO, Arrays.toString(parameters));
+		}else {
+			test = report.startTest(result.getName());
+		}
 	}
 
 	@Override
@@ -37,7 +44,10 @@ public class TestNgListener extends TestExecution implements ISuiteListener, ITe
 
 	@Override
 	public void onTestFailure(ITestResult result) {
-		test.log(LogStatus.INFO, test.addScreenCapture(getScreenshot("screenshots", result.getName())));
+		Object currentClass = result.getInstance();
+		WebDriver driver = ((BaseClass) currentClass).getDriver();
+		test.log(LogStatus.FAIL, driver.getTitle());
+		test.log(LogStatus.INFO, test.addScreenCapture(getScreenshot("screenshots", result.getName(), driver)));
 		report.endTest(test);
 	}
 
@@ -49,21 +59,19 @@ public class TestNgListener extends TestExecution implements ISuiteListener, ITe
 	@Override
 	public void onTestFailedButWithinSuccessPercentage(ITestResult result) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onStart(ITestContext context) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onFinish(ITestContext context) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
-	
 
 }

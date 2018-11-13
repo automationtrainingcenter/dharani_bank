@@ -25,24 +25,29 @@ public class BaseClass {
 	static ExtentReports report;
 	static ExtentTest test;
 	
+	public WebDriver getDriver() {
+		return driver;
+	}
+	
 	public String getDate() {
 		Date date = new Date();
 		DateFormat df = new SimpleDateFormat("dd_MMM_yy_hh-mm-ss_a");
 		return df.format(date);
 	}
 	
-	public String getScreenshot(String folderName, String fileName) {
-		 File img = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+	public String getScreenshot(String folderName, String fileName, WebDriver driver) {
+		 File img = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
 		 File desImg = new File(getFilePath(folderName, fileName)+getDate()+".png");
 		 try {
 			FileUtils.copyFile(img, desImg);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		 System.out.println(desImg.getAbsolutePath());
 		 return desImg.getAbsolutePath();
 	}
 	
-	public String getFilePath(String folderName, String fileName) {
+	public static String getFilePath(String folderName, String fileName) {
 		return System.getProperty("user.dir")+File.separator+folderName+File.separator+fileName;
 	}
 	
